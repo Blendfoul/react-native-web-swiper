@@ -1,21 +1,29 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StyleProp, ViewStyle, TextStyle } from 'react-native';
 
 import { renderNode } from './renderNode';
 
-const Badge = props => {
-  const {
-    containerStyle,
-    textStyle,
-    badgeStyle,
-    onPress,
-    Component = onPress ? TouchableOpacity : View,
-    value,
-    theme,
-    status,
-    ...attributes
-  } = props;
+type BadgeProps = {
+  containerStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+  badgeStyle?: StyleProp<ViewStyle>;
+  onPress?: () => void;
+  Component?: React.ElementType;
+  value?: React.ReactNode;
+  theme?: object;
+  status?: 'primary' | 'success' | 'warning' | 'error';
+};
+
+const Badge: React.FC<BadgeProps> = ({
+  containerStyle,
+  textStyle,
+  badgeStyle,
+  onPress,
+  Component = onPress ? TouchableOpacity : View,
+  value,
+  theme,
+  status = 'primary',
+  ...attributes
+}) => {
 
   const element = renderNode(Text, value, {
     style: StyleSheet.flatten([styles.text, textStyle && textStyle]),
@@ -38,31 +46,14 @@ const Badge = props => {
   );
 };
 
-Badge.propTypes = {
-  containerStyle: PropTypes.shape({
-    style: PropTypes.any,
-  }),
-  badgeStyle: PropTypes.shape({
-    style: PropTypes.any,
-  }),
-  textStyle: PropTypes.shape({
-    style: PropTypes.any,
-  }),
-  value: PropTypes.node,
-  onPress: PropTypes.func,
-  Component: PropTypes.func,
-  theme: PropTypes.object,
-  status: PropTypes.oneOf(['primary', 'success', 'warning', 'error']),
-};
-
-Badge.defaultProps = {
-  status: 'primary',
-};
-
 const size = 18;
 const miniSize = 8;
 
-const styles = {
+const styles: {
+  badge: (theme: any, status: string) => ViewStyle;
+  miniBadge: ViewStyle;
+  text: TextStyle;
+} = {
   badge: (theme, status) => ({
     alignSelf: 'center',
     minWidth: size,

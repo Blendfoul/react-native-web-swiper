@@ -4,6 +4,7 @@ import {
     TextStyle,
     StyleProp,
 } from 'react-native';
+import { WithSpringConfig } from 'react-native-reanimated';
 
 type Falsy = undefined | null | false;
 interface RecursiveArray<T> extends Array<T | RecursiveArray<T>> {}
@@ -190,21 +191,60 @@ interface SwiperControlsProps {
      * Custom next element on last slide (if not loop)
      */
     lastNextElement?: React.ReactElement<{}>;
-}
 
-// TODO: extends Animated.SpringAnimationConfig but without toValue
-interface SwiperSpringAnimationConfig {
-    overshootClamping?: boolean;
-    restDisplacementThreshold?: number;
-    restSpeedThreshold?: number;
-    velocity?: number | { x: number; y: number };
-    bounciness?: number;
-    speed?: number;
-    tension?: number;
-    friction?: number;
-    stiffness?: number;
-    mass?: number;
-    damping?: number;
+    /**
+     * Theme object for styling
+     */
+    theme?: {
+        colors: {
+            [key: string]: string;
+        };
+        [key: string]: any;
+    };
+
+    /**
+     * Vertical layout
+     *
+     * @default false
+     */
+    vertical?: boolean;
+
+    /**
+     * Total slides count
+     */
+    count?: number;
+
+    /**
+     * Active slide index
+     */
+    activeIndex?: number;
+
+    /**
+     * Is first slide
+     */
+    isFirst?: boolean;  
+
+    /**
+     * Is last slide
+     */
+    isLast?: boolean;
+
+    /**
+     * Go to previous slide
+     */
+    goToPrev(): void;
+
+    /**
+     * Go to next slide
+     */
+    goToNext(): void;
+
+    /**
+     * Go to slide by index
+     *
+     * @param index
+     */
+    goTo(index: number): void;
 }
 
 export interface SwiperProps {
@@ -246,7 +286,7 @@ export interface SwiperProps {
     /**
      * Tune spring animation on autoplay, touch release or slides changes via buttons
      */
-    springConfig?: SwiperSpringAnimationConfig;
+    springConfig?: WithSpringConfig;
 
     /**
      * Initiate animation after swipe this distance.
@@ -335,6 +375,16 @@ export interface SwiperProps {
      *  Children props for functional components
     */
     children?: React.ReactNode;
+
+    /**
+     * Theme object for styling
+     */
+    theme?: {
+        colors: {
+            [key: string]: string;
+        };
+        [key: string]: any;
+    };
 }
 
 /**

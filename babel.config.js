@@ -1,10 +1,8 @@
-module.exports = function(api) {
-    api.cache(true);
-    return {
-        presets: ["minify"],
-        plugins: [
-          "@babel/plugin-transform-react-jsx",
-          "@babel/plugin-proposal-class-properties"
-        ],
-    };
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    plugins: [
+      'react-native-reanimated/plugin',
+    ],
+  };
 };
