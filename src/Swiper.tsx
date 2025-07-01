@@ -99,6 +99,7 @@ const Swiper: FC<SwiperProps> = ({
   const clearAutoplay = useCallback(() => {
     if (autoplayRef.current) clearTimeout(autoplayRef.current);
   }, []);
+
   const startAutoplay = useCallback(() => {
     clearAutoplay();
     if (timeout) {
@@ -130,7 +131,7 @@ const Swiper: FC<SwiperProps> = ({
     [activeIndex, fixAndGo]
   );
 
-    // Animate to position
+  // Animate to position
   const animateTo = useCallback(
     (value: number) => {
       drag.value = withSpring(
@@ -202,13 +203,13 @@ const Swiper: FC<SwiperProps> = ({
   const gesture = useMemo(() => {
     let panGesture = Gesture.Pan()
       .enabled(gesturesEnabled());
-    
+
     if (vertical) {
       panGesture = panGesture.activeOffsetY(minDistanceToCapture);
     } else {
       panGesture = panGesture.activeOffsetX(minDistanceToCapture);
     }
-    
+
     return panGesture
       .onStart(() => {
         fixOffset();
@@ -235,8 +236,8 @@ const Swiper: FC<SwiperProps> = ({
                 ? 1
                 : -1
               : !vertical && I18nManager.isRTL
-              ? -1
-              : 1;
+                ? -1
+                : 1;
           runOnJS(changeIndex)(dir);
         }
       })
@@ -275,6 +276,18 @@ const Swiper: FC<SwiperProps> = ({
     fixOffset();
   }, [activeIndex, layout.width, layout.height, vertical, fixOffset]);
 
+  const renderItem = useCallback((el: React.ReactElement, i: number) => (
+    <View
+      key={i}
+      style={StyleSheet.flatten([
+        { width: layout.width, height: layout.height },
+        slideWrapperStyle,
+      ])}
+    >
+      {el}
+    </View>
+  ), [layout.width, layout.height, slideWrapperStyle]);
+
   // Render
   return (
     <View
@@ -298,17 +311,7 @@ const Swiper: FC<SwiperProps> = ({
               animatedStyle,
             ])}
           >
-            {slides.map((el, i) => (
-              <View
-                key={i}
-                style={StyleSheet.flatten([
-                  { width: layout.width, height: layout.height },
-                  slideWrapperStyle,
-                ])}
-              >
-                {el}
-              </View>
-            ))}
+            {slides.map(renderItem)}
           </Animated.View>
         </GestureDetector>
         {controlsEnabled && Controls && (
