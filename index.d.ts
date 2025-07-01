@@ -222,7 +222,7 @@ interface SwiperControlsProps {
     /**
      * Is first slide
      */
-    isFirst?: boolean;  
+    isFirst?: boolean;
 
     /**
      * Is last slide
@@ -245,6 +245,43 @@ interface SwiperControlsProps {
      * @param index
      */
     goTo(index: number): void;
+}
+
+/**
+ * Interface for the Swiper component ref
+ */
+export interface SwiperRef {
+    /**
+     * Go to next slide
+     */
+    goToNext(): void;
+
+    /**
+     * Go to previous slide
+     */
+    goToPrev(): void;
+
+    /**
+     * Go to slide by index
+     * @param index The index to go to
+     */
+    goTo(index: number): void;
+
+    /**
+     * Get current slide index
+     * @returns The current active index
+     */
+    getActiveIndex(): number;
+
+    /**
+     * Manual start autoplay after manual stop
+     */
+    startAutoplay(): void;
+
+    /**
+     * Manual stop autoplay. Will be automatically restarted after any animation
+     */
+    stopAutoplay(): void;
 }
 
 export interface SwiperProps {
@@ -370,7 +407,7 @@ export interface SwiperProps {
      * @param index
      */
     onIndexChanged?(index: number): void;
-    
+
     /**
      *  Children props for functional components
     */
@@ -385,39 +422,14 @@ export interface SwiperProps {
         };
         [key: string]: any;
     };
+
+    /**
+     * Accessibility label for the swiper
+     */
+    accessibilityLabel?: string;
 }
 
 /**
  * Swiper component
  */
-export default class Swiper extends React.Component<SwiperProps, any> {
-    /**
-     * Go to next slide
-     */
-    goToNext(): void;
-
-    /**
-     * Go to previous slide
-     */
-    goToPrev(): void;
-
-    /**
-     * Go to slide by index
-     */
-    goTo(index: number): void;
-
-    /**
-     * Get current slide index
-     */
-    getActiveIndex(): number;
-
-    /**
-     * Manual start autoplay after manual stop
-     */
-    startAutoplay(): void;
-
-    /**
-     * Manual stop autoplay. Will be automatically restarted after any animation
-     */
-    stopAutoplay(): void;
-}
+export default function Swiper(props: SwiperProps & { ref?: React.Ref<SwiperRef> }): JSX.Element;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import colors from './colors';
 import { TextStyle, View, ViewStyle, StyleSheet, Text } from 'react-native';
 import { SwiperControlsProps } from '..';
@@ -20,6 +20,7 @@ const cellPositions = [
 
 const Dot: React.FC<any> = ({ isActive, onPress, dotProps = {}, dotActiveStyle }) => {
   const { containerStyle, badgeStyle, ...others } = dotProps || {};
+
   return (
     <Badge
       theme={{ colors }}
@@ -128,13 +129,13 @@ const Cell: React.FC<any> = ({ name, cellsStyle = {}, cellsContent = {}, dotPosi
   );
 };
 
+const alignItems = ['flex-start', 'center', 'flex-end'] as const;
 const Row: React.FC<any> = ({ rowAlign = 'center', contentAlign, ...props }) => {
   const row = [
     `${!rowAlign ? '' : rowAlign + '-'}left`,
     rowAlign,
     `${!rowAlign ? '' : rowAlign + '-'}right`,
   ] as const;
-  const alignItems = ['flex-start', 'center', 'flex-end'] as const;
 
   return (
     <View style={styles.row}>
@@ -159,9 +160,20 @@ const DefaultControls: React.FC<SwiperControlsProps> = (props) => {
     nextTitle = 'Next',
   } = props;
 
-  const dotPosition = getPos(props.dotsPos, 'bottom', 'right', vertical);
-  const prevPosition = getPos(props.prevPos, 'bottom-left', 'top-right', vertical);
-  const nextPosition = getPos(props.nextPos, 'bottom-right', 'top-left', vertical);
+  const dotPosition = useMemo(() =>
+    getPos(props.dotsPos, 'bottom', 'right', vertical),
+    [props.dotsPos, vertical]
+  );
+
+  const prevPosition = useMemo(() =>
+    getPos(props.prevPos, 'bottom-left', 'top-right', vertical),
+    [props.prevPos, vertical]
+  );
+
+  const nextPosition = useMemo(() =>
+    getPos(props.nextPos, 'bottom-right', 'top-left', vertical),
+    [props.nextPos, vertical]
+  );
 
   return (
     <>
@@ -176,7 +188,7 @@ type Styles = {
   row: ViewStyle;
   spaceHolder: (alignItems: 'flex-start' | 'center' | 'flex-end') => ViewStyle;
   cell: ViewStyle;
-  dotsWrapper: (vertical: boolean) => ViewStyle;
+  dotsWrapper: (vertical?: boolean) => ViewStyle;
   dotsItemContainer: ViewStyle;
   dotsItem: (theme: any, isActive: boolean) => ViewStyle;
   buttonTitleStyle: (theme: any, type: 'prev' | 'next') => TextStyle;
@@ -209,7 +221,7 @@ const styles: Styles = {
     minHeight: 1,
   }),
   dotsItemContainer: {
-    margin: 3,
+    margin: 4,
   },
   dotsItem: (theme, isActive) => ({
     backgroundColor: isActive ? theme.colors.primary : theme.colors.grey3,

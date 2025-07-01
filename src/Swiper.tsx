@@ -1,11 +1,11 @@
 import React, {
-  useRef,
-  useCallback,
-  useEffect,
-  useState,
-  useMemo,
-  ReactElement,
-  FC,
+    useRef,
+    useCallback,
+    useEffect,
+    useState,
+    useMemo,
+    ReactElement,
+    FC, forwardRef,
 } from 'react';
 import { I18nManager, StyleSheet, View, ViewStyle } from 'react-native';
 import {
@@ -19,7 +19,7 @@ import Animated, {
   runOnJS,
   WithSpringConfig,
 } from 'react-native-reanimated';
-import { SwiperControlsProps, SwiperProps } from '..';
+import {SwiperControlsProps, SwiperProps, SwiperRef} from '..';
 import DefaultControls from './Controls';
 
 const defaultSpring: WithSpringConfig = {
@@ -28,7 +28,7 @@ const defaultSpring: WithSpringConfig = {
   mass: 0.4,
 };
 
-const Swiper: FC<SwiperProps> = ({
+const Swiper: FC<SwiperProps> = forwardRef<SwiperRef, SwiperProps>(({
   children,
   vertical = false,
   from = 0,
@@ -331,7 +331,7 @@ const Swiper: FC<SwiperProps> = ({
       </View>
     </View>
   );
-};
+});
 
 type SwiperStyleProps = {
   root: ViewStyle;
